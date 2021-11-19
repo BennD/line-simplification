@@ -7,7 +7,11 @@ pub use douglas_peucker_v1 as douglas_peucker;
 /// > based on pseudo code on [Wikipedia](https://en.wikipedia.org/wiki/Ramer%E2%80%93Douglas%E2%80%93Peucker_algorithm)
 ///
 /// > returns an empty vector in case `|points| < 2`
-pub fn douglas_peucker_v1(points: &[Point], threshhold: f32) -> Vec<Point> {
+pub fn douglas_peucker_v1(points: &[Point], threshold: f32) -> Vec<Point> {
+    douglas_peucker_v1_internal(points, threshold.abs())
+}
+
+fn douglas_peucker_v1_internal(points: &[Point], treshold: f32) -> Vec<Point> {
     match points {
         [first, rest @ .., last] => {
             let line = Line {
@@ -25,9 +29,9 @@ pub fn douglas_peucker_v1(points: &[Point], threshhold: f32) -> Vec<Point> {
                 }
             }
 
-            if distance_max > threshhold {
-                let left = douglas_peucker_v1(&points[0..index + 1], threshhold);
-                let right = douglas_peucker_v1(&points[index..], threshhold);
+            if distance_max > treshold {
+                let left = douglas_peucker_v1_internal(&points[0..=index], treshold);
+                let right = douglas_peucker_v1_internal(&points[index..], treshold);
                 merge_lines(left, right)
             } else {
                 vec![line.start, line.end]
