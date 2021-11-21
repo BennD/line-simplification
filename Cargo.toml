@@ -4,3 +4,14 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+emath = { version = "0.15.0", optional = true }
+
+[dev-dependencies]
+eframe = "0.15.0"
+
+[[example]]
+name = "demo"
+required-features = ["emath"]
+
+[features]
+default = []
